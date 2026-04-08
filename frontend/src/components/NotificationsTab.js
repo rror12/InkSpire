@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from '../config';
 import './NotificationsTab.css';
 
 function NotificationsTab() {
@@ -11,7 +12,7 @@ function NotificationsTab() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/friend-request/${currentUser._id}`);
+        const res = await axios.get(`${API_URL}/api/friend-request/${currentUser._id}`);
         setRequests(res.data);
       } catch (err) {
         console.error("Failed to load requests", err);
@@ -23,7 +24,7 @@ function NotificationsTab() {
 
   const handleAccept = async (fromUserId) => {
     try {
-      await axios.post("http://localhost:5000/api/friend-request/accept", {
+      await axios.post(`${API_URL}/api/friend-request/accept`, {
         from: fromUserId,
         to: currentUser._id
       });

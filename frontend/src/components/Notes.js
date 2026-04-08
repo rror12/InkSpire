@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_URL from '../config';
 import './Notes.css';
 
 function Notes() {
@@ -22,7 +23,7 @@ function Notes() {
   const fetchNotes = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/notes', {
+      const res = await axios.get(`${API_URL}/api/notes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -37,7 +38,7 @@ function Notes() {
   // Fetch friends for sharing dropdown
   const fetchFriends = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/users/friends?currentUserId=${user?._id}`);
+      const res = await axios.get(`${API_URL}/api/users/friends?currentUserId=${user?._id}`);
       setFriends(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error('Error fetching friends:', err);
@@ -68,13 +69,13 @@ function Notes() {
 
       if (editNoteId) {
         await axios.put(
-          `http://localhost:5000/api/notes/${editNoteId}`,
+          `${API_URL}/api/notes/${editNoteId}`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
         await axios.post(
-          'http://localhost:5000/api/notes',
+          `${API_URL}/api/notes`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -91,7 +92,7 @@ function Notes() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/notes/${id}`, {
+      await axios.delete(`${API_URL}/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchNotes();
@@ -111,7 +112,7 @@ function Notes() {
   const handleShare = async (noteId, selectedIds) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5000/api/notes/${noteId}/share`, {
+      await axios.post(`${API_URL}/api/notes/${noteId}/share`, {
         shareWithUserIds: selectedIds
       }, {
         headers: { Authorization: `Bearer ${token}` }

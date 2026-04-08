@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from '../config';
 import './login.css';
 import './FriendsTab.css';
 
@@ -34,11 +35,11 @@ function FriendsTab() {
     const fetchAll = async () => {
       try {
         // Fetch friends first
-        const friendsRes = await axios.get(`http://localhost:5000/api/users/friends?currentUserId=${currentUserId}`);
+        const friendsRes = await axios.get(`${API_URL}/api/users/friends?currentUserId=${currentUserId}`);
         setFriends(Array.isArray(friendsRes.data) ? friendsRes.data : []);
 
         // Fetch suggestions (people you might know)
-        const res = await axios.get(`http://localhost:5000/api/users?currentUserId=${currentUserId}`);
+        const res = await axios.get(`${API_URL}/api/users?currentUserId=${currentUserId}`);
         const allUsers = Array.isArray(res.data) ? res.data : [];
 
         // Filter out the current user (backend already does, but keep it safe)
@@ -57,7 +58,7 @@ function FriendsTab() {
 
   const sendFriendRequest = async (userId, fname, lname) => {
     try {
-      await axios.post("http://localhost:5000/api/friend-request", {
+      await axios.post(`${API_URL}/api/friend-request`, {
         from: currentUserId,
         to: userId
       });
